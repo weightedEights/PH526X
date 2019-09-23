@@ -6,7 +6,7 @@ Docstring
 
 import numpy as np
 import random
-import scipy.stats as ss
+from scipy import stats as ss
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
 
     votes = [1, 2, 3, 1, 2, 3, 1, 2, 3, 3, 3, 3, 3]
 
-    print(majority_vote(votes))
+    print(majority_vote_short(votes))
 
 
 def distance(p1, p2):
@@ -43,6 +43,14 @@ def majority_vote(votes):
 
     # if tie, choose any
     return random.choice(winners)
+
+
+def majority_vote_short(votes):
+    """
+    Return the most common element in votes
+    """
+    mode, count = ss.mode(votes)
+    return mode
 
 
 if __name__ == '__main__':
