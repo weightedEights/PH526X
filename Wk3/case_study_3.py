@@ -7,6 +7,7 @@ Docstring
 import numpy as np
 import random
 from scipy import stats as ss
+import matplotlib.pyplot as plt
 
 
 def main():
@@ -18,8 +19,18 @@ def main():
 
     points = np.array([[1, 1], [1, 2], [1, 3], [2, 1], [2, 2], [2, 3], [3, 1], [3, 2], [3, 3]])
     p = np.array([2.5, 2])
+    outcomes = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1])
 
-    print(majority_vote_short(votes))
+    knnp = knn_predict(p, points, outcomes, 2)
+
+    print(knnp)
+
+    plt.plot(points[:,0], points[:,1], "ro")
+    plt.plot(p[0], p[1], "bo")
+
+    # plt.show()
+
+    # print(majority_vote_short(votes))
 
 
 def distance(p1, p2):
@@ -54,6 +65,27 @@ def majority_vote_short(votes):
     """
     mode, count = ss.mode(votes)
     return mode
+
+
+def find_nearest_neighbors(p, points, k=5):
+    """
+    return indices of k nearest neighbors to point p in list points
+    """
+    distances = np.zeros(points.shape[0])
+
+    for i in range(len(distances)):
+        distances[i] = distance(p, points[i])
+
+    return np.argsort(distances)[:k]
+
+
+def knn_predict(p, points, outcomes, k=5):
+    """
+    find k nearest neighbors
+    """
+    ind = find_nearest_neighbors(p, points, k)
+
+    return majority_vote(outcomes[ind])
 
 
 if __name__ == '__main__':
