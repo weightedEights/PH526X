@@ -17,20 +17,24 @@ def main():
 
     votes = [1, 2, 3, 1, 2, 3, 1, 2, 3, 3, 3, 3, 3]
 
-    points = np.array([[1, 1], [1, 2], [1, 3], [2, 1], [2, 2], [2, 3], [3, 1], [3, 2], [3, 3]])
-    p = np.array([2.5, 2])
-    outcomes = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1])
+    # points = np.array([[1, 1], [1, 2], [1, 3], [2, 1], [2, 2], [2, 3], [3, 1], [3, 2], [3, 3]])
+    # p = np.array([2.5, 2])
+    # outcomes = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1])
 
-    knnp = knn_predict(p, points, outcomes, 2)
+    # knnp = knn_predict(p, points, outcomes, 2)
 
-    print(knnp)
-
-    plt.plot(points[:,0], points[:,1], "ro")
-    plt.plot(p[0], p[1], "bo")
+    # plt.plot(points[:,0], points[:,1], "ro")
+    # plt.plot(p[0], p[1], "bo")
 
     # plt.show()
 
-    # print(majority_vote_short(votes))
+    n = 20
+    (points, outcomes) = generate_synth_data(n)
+
+    plt.figure()
+    plt.plot(points[:n, 0], points[:n, 1], 'ro')
+    plt.plot(points[n:, 0], points[n:, 1], 'bo')
+    plt.show()
 
 
 def distance(p1, p2):
@@ -86,6 +90,16 @@ def knn_predict(p, points, outcomes, k=5):
     ind = find_nearest_neighbors(p, points, k)
 
     return majority_vote(outcomes[ind])
+
+
+def generate_synth_data(n=50):
+    """
+    generate bivariate normal points, outcomes, return tuple
+    """
+    points = np.concatenate((ss.norm(0, 1).rvs((n, 2)), ss.norm(1, 1).rvs((n, 2))), axis=0)
+    outcomes = np.concatenate((np.repeat(0, n), np.repeat(1, n)))
+
+    return (points, outcomes)
 
 
 if __name__ == '__main__':
